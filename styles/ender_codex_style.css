@@ -1,0 +1,136 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0d2130;
+    width: 90%;
+    margin: 2em auto;
+    font: 1em/1.3 Verdana;
+    color: #f05000;
+}
+
+a:link,
+a:visited {
+    color: #f05000;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin-left: 2em;
+    margin-right: 2em;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+
+nav a:link,
+nav a:visited {
+    background-color: #0d2130;
+    border: 2px solid #f05000;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+nav div {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 1em;
+}
+
+
+
+#mainbutton {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+nav a:hover {
+    background-color: #666;
+}
+
+main article {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+
+
+
+footer {
+    border-top: 1px solid #f05000;
+    margin-top: 2em;
+}
+
+
+
+main article div {
+    border: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border-bottom: #f05000 0.5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-style: dotted;
+}
+
+main article div img {
+    width: 1080px;
+    height: 608px;
+    padding: 1em;
+}
+
+.tall {
+    width: 1080px;
+    height: 1920px;
+}
+
+
+.textimgblock {display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.textimgblock p {
+    width: 20em;
+}
+
+@media screen and (min-width: 70em) {
+    article {
+        grid-template-columns: 3fr 1fr;
+        column-gap: 20px;
+    }
+
+    nav ul {
+        display: flex;
+    }
+
+    nav li {
+        flex: 1;
+    }
+    main article div {
+        border: #f05000 0.5em;
+        padding-left: 1em;
+        padding-right: 1em;
+        padding-top: 0;
+        padding-bottom: 0;
+        border-style: dotted;
+    }
+    body {
+        font: 3em/1.3 Verdana;
+    }
+}
+
+
+
+
