@@ -1,0 +1,94 @@
+
+.addresses {
+    
+    display: flex;
+    justify-content: space-evenly;
+}
+
+address {
+    width: 45%;
+    background-color: aqua;
+    border: 0.5em;
+    border-color: black;
+    border-style: solid;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+
+}
+
+strong {
+    font-size: 125%;
+}
+
+address p {
+    font-style: normal;
+}
+
+main p {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+main h1, main h2 {
+    display: flex;
+    justify-content: center;
+}
+
+a:link,
+a:visited {
+    text-decoration: none;
+}
+
+a:visited {
+    color: #f05000;
+
+}
+
+a[href]:not(:where( /* Source  https://stackoverflow.com/questions/5379752/css-style-external-links */
+  /* exclude hash only links */
+  [href^="#"],
+  /* exclude relative but not double slash only links */
+  [href^="/"]:not([href^="//"]),
+)) {
+  color: red;
+}
+
+a[href]:not(:where(
+  /* exclude hash only links */
+  [href^="#"],
+  /* exclude relative but not double slash only links */
+  [href^="/"]:not([href^="//"]),
+)):visited {
+  color: purple;
+}
+
+main li {
+    list-style: upper-roman;
+}
+
+main dl dd{
+    display: none;
+}
+
+main dt:hover + dd{
+    display: inline;
+}
+
+h2 + p::first-line {
+    color: gray;
+}
+
+.remove {
+    background-color: red;
+    border: 0.5em;
+    border-color: black;
+    border-style: solid;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+    margin-bottom: 2em;
+    width: 9%;
+
+}
+
+.remove:hover ~ * {
+    all: initial;
+}
