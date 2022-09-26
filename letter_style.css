@@ -89,6 +89,6 @@ h2 + p::first-line {
 
 }
 
-.remove:hover ~ * {
-    all: initial;
+.remove:hover ~ * , .remove:hover ~ * * {
+    all: unset;
 }
