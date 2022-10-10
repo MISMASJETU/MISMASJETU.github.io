@@ -44,25 +44,7 @@ nav div {
     margin-bottom: 1em;
 }
 
-@media only screen and (max-width: 1080px) and (orientation: landscape) {
-    body {
-      background-color: lightblue;
-    }
-    nav div {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        margin-bottom: 1em;
-    }
-
-    main {
-        grid-template-columns: 1fr;
-         grid-template-rows: 1fr 0.05fr 1fr;
-    }
-
-  }
-
-  @media only screen and (max-width: 1080px) and (orientation: portrait) {
+@media only screen and ((max-height: 1080px) and (orientation: landscape)) or ((max-width: 1080px) and (orientation: portrait))  {
     body {
       background-color: lightblue;
     }
