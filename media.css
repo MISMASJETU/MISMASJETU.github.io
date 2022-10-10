@@ -44,7 +44,7 @@ nav div {
     margin-bottom: 1em;
 }
 
-@media only screen and (max-width: 1080px) {
+@media only screen and (max-width: 1200px) {
     body {
       background-color: lightblue;
     }
