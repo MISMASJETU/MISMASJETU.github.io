@@ -62,12 +62,7 @@ nav div {
 
   }
 
-  @media only screen and (orientation: landscape)  {
-   
-    footer {
-        background-color: blue;
-    }
-  }
+  
 
 .images {
     display: flex;
