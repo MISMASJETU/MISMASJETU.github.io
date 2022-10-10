@@ -44,7 +44,7 @@ nav div {
     margin-bottom: 1em;
 }
 
-@media only screen and ((max-height: 1080px) and (orientation: landscape)) or ((max-width: 1080px) and (orientation: portrait))  {
+@media only screen and (((max-width: 1080px) and (orientation: landscape)) or ((max-width: 1080px) and (orientation: portrait)))  {
     body {
       background-color: lightblue;
     }
