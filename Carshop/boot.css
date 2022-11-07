@@ -1,0 +1,65 @@
+html {
+    background-image: url('../Carshop/img/sky.png');
+    background-repeat: repeat-y;
+    background-size: 100%;
+    image-rendering: pixelated;
+    padding-left: 5em;
+    padding-right: 5em;
+}
+
+#backarrow {
+    width: 20px;
+    height: 20px;
+    image-rendering:auto;
+}
+
+#title img{
+    width: 722px;
+    height: 116px;
+}
+
+#spamton img{
+    width: 240px;
+    height: 240px;
+}
+
+header {
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+}
+
+@media only screen and (((max-width: 1200px) and (orientation: landscape)) or ((max-width: 1200px) and (orientation: portrait)))  {
+
+    header {
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    #title img{
+        width: 361px;
+        height: 53px;
+    }
+    
+}
+
+@media only screen and (((max-width: 768px) and (orientation: landscape)) or ((max-width: 768px) and (orientation: portrait)))  {
+
+    #title img{
+        width: 180px;
+        height: 26px;
+    }
+    
+}
+.slideshow {
+    padding-left: 5em;
+    padding-right: 5em;
+}
+
+.main {
+    padding: 3em;
+}
+
+#intro {
+    padding: 3em;
+}
