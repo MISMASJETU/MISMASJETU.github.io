@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Website</title>
+    <link rel="stylesheet" href="./bestpage.css">
+  </head>
+  <body>
+    <div class="border">
+        <label for="guessField">Enter a guess: </label>
+        <input type="number" id="guessField" class="guessField" />
+        <input type="submit" value="Submit guess" class="guessSubmit" />
+        <div class="resultParas">
+            <p class="guesses"></p>
+            <p class="lastResult"></p>
+            <p class="lowOrHi"></p>
+        </div>
+    </div>
+    <div class="border">
+        <label for="field">Add number: </label>
+        <input type="number" id="field" class="field" />
+        <input type="submit" value="Submit" class="submit" />
+        <div class="storageParas">
+            <p class="storage"></p>
+        </div>
+    </div>
+    <div class="border">
+        <label for="modulo">Modulo with: </label>
+        <input type="number" id="modulo" class="modulo"/>
+        <input type="submit" value="Submit" class="submit1" />
+        <div class="moduloParas">
+            <p class="moduloA">Modulo result: </p>
+        </div>
+        <label for="answer">Answer: </label>
+        <input type="number" id="answer" class="answer"/>
+        <input type="submit" value="Submit" class="submit2" />
+        <div class="answerParas">
+            <p class="answerA">Waiting for answer</p>
+        </div>
+        <input type="submit" value="Reset" class="submit3" />
+    </div>
+  </body>
+  <script src="./js/counter.js"></script>
+  <script src="./js/counting.js"></script>
+  <script src="./js/modulo.js"></script>
+</html>

@@ -1,0 +1,14 @@
+.border {
+    border: 5px;
+    border-style: double;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
+.answerA {
+    background-color: yellow;
+}
+
+.disable {
+    display: none;
+}
