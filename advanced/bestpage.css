@@ -5,10 +5,42 @@
     margin-bottom: 1em;
 }
 
+.short {
+    width: fit-content;
+}
+
+.row {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: left;
+}
+
+.rowElement {
+    margin-right: 1em;
+}
+
 .answerA {
     background-color: yellow;
+    width: fit-content;
 }
 
 .disable {
     display: none;
+}
+
+a:link,
+a:visited {
+    color: black;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 70em) {
+    .row {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .rowElement {
+        margin-bottom: 0.2em;
+    }
 }

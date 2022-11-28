@@ -1,4 +1,4 @@
-let moduloNumber = Math.floor(Math.random() * 1000) + 1;
+let moduloNumber = Math.floor(Math.random() * 10) + 1;
 const moduloAnswer = document.querySelector('.moduloA');
 const submitModulo = document.querySelector('.submit1');
 const moduloInput = document.querySelector('.modulo');
@@ -14,8 +14,12 @@ function tryModulo() {
     //NO OPTION FOR NUMBERS HIGHER THAN 99 AND NEGATIVE NUMBERS
     //ALSO THINK OF STRATEGY, HINT: SEARCH UP CHINESE GENERALS
     const moduloTmp = Number(moduloInput.value);
-    moduloAnswer.textContent = 'Modulo result: ';
-    moduloAnswer.textContent += `${moduloNumber % moduloTmp}`;
+    if(moduloTmp < 100 && moduloTmp > 0){
+        moduloAnswer.textContent = 'Modulo result: ';
+        moduloAnswer.textContent += `${moduloNumber % moduloTmp}`;
+    } else {
+        alert('Number must be in between 1 and 99')
+    }
     moduloInput.value = '';
     moduloInput.focus();
 }
