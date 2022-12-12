@@ -1,0 +1,2 @@
+qs - quicksort.js
+ts - textsort.js
