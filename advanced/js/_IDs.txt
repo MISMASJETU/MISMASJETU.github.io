@@ -1,2 +1,4 @@
 qs - quicksort.js
 ts - textsort.js
+ps - personsort.js
+gl - gallery.js
