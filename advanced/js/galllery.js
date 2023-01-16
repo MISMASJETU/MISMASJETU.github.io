@@ -1,3 +1,20 @@
+
+const GL_pName = document.querySelector('.GL_pName');
+const GL_pAuthor = document.querySelector('.GL_pAuthor');
+const GL_pPrice = document.querySelector('.GL_pPrice');
+const GL_pYear = document.querySelector('.GL_pYear');
+const GL_pStorage = document.querySelector('.GL_pStorage');
+const GL_pStorageParams = document.querySelector('.GL_pStorageParams');
+const GL_pSubmit = document.querySelector(".GL_pSubmit");
+
+const GL_aName = document.querySelector('.GL_aName');
+const GL_aSurname = document.querySelector('.GL_aSurname');
+const GL_aBirthday = document.querySelector('.GL_aBirth');
+const GL_atorage = document.querySelector('.GL_aStorage');
+const GL_aStorageParams = document.querySelector('.GL_aStorageParams');
+const GL_aSubmit = document.querySelector(".GL_aSubmit");
+
+
 class GL_image {
     name;
     Author;
@@ -70,10 +87,50 @@ class GL_author {
 
 let GL_authors = [new GL_author("Karel","Novak","2004-1-23"),new GL_author("Vaclav","Klaus","2002-5-12"),new GL_author("Michala","Tmava","1990-8-30")];
 let GL_images = [new GL_image("cerny zapad",GL_authors[1], 231249, 2020),new GL_image("slunce svetu",GL_authors[1], 10932, 2021),new GL_image("rusne mesto",GL_authors[2], 248329, 2023),new GL_image("pysny venkov",GL_authors[0], 14728, 2023)];
+    
+GL_write();
+GL_startup()
 
-console.log(GL_images[0]);
-console.log(GL_images[1]);
-console.log(GL_images[2]);
-console.log(GL_images[3]);
-console.log(GL_image.PriceSum());   
-console.log(GL_image.LargePrice());   
+function GL_write(){
+    let GL_toWrite = "";
+    for(let i = 0; i < GL_images.length; i++){
+        GL_toWrite += GL_images[i] + "<br>";
+    }
+    GL_pStorage.innerHTML = GL_toWrite;
+}
+
+function GL_addPicture(){
+    GL_images.push(new GL_image(
+        GL_pName.value,
+        GL_pAuthor.value,
+        GL_pPrice.value,
+        GL_pYear.value));
+    GL_pName.value = "";
+    GL_pPrice.value = "";
+    GL_pYear.value = "";
+    GL_write();
+}
+
+function GL_addAuthor(){
+    GL_authors.push(new GL_author(
+        GL_aName.value,
+        GL_aSurname.value,
+        GL_aBirthday.value));
+    GL_aName.value = "";
+    GL_aSurname.value = "";
+    GL_aBirthday.value = "";
+    GL_startup();
+    GL_write();
+}
+
+function GL_startup(){
+    let GL_pSelectString = "";
+    for(let i = 0; i < GL_authors.length; i++){
+        GL_pSelectString += "<option value=\"" + GL_authors[i] +"\">" + GL_authors[i].name + " " + GL_authors[i].surname + "</option>"
+    }
+    GL_pAuthor.innerHTML = GL_pSelectString;
+}
+
+
+GL_pSubmit.addEventListener('click', GL_addPicture);
+GL_aSubmit.addEventListener('click', GL_addAuthor);

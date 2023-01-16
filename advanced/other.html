@@ -26,20 +26,45 @@
                 <a href="other.html">OTHER</a>
             </div>
         </div>
+        
     </nav>
     <main>
         <div class="border">
-            <h4>Counter</h4>
-            <label for="field">Add number: </label>
-            <input type="number" id="field" class="field" />
-            <input type="submit" value="Submit" class="submit" />
-            <div class="storageParas">
-                <p class="storage"></p>
+            <h4>Paintings</h4>
+            <label for="GL_pName">Name: </label>
+            <input type="text" id="GL_pName" class="GL_pName" /><br>
+            <label for="GL_pAuthor">Author: </label>
+            <select id="GL_pAuthor" class="GL_pAuthor">
+                <option value="volvo">Volvo</option>
+                <option value="saab">Saab</option>
+                <option value="fiat">Fiat</option>
+                <option value="audi">Audi</option>
+            </select><br>
+            <label for="GL_pPrice">Price: </label>
+            <input type="number" id="GL_pPrice" class="GL_pPrice" /><br>
+            <label for="GL_pYear">Year: </label>
+            <input type="number" id="GL_pYear" class="GL_pYear" /><br>
+            <input type="submit" value="Submit" class="GL_pSubmit" />
+            <div class="GL_pStorageParams">
+                <p class="GL_pStorage"></p>
+            </div>
+
+
+            <h4>Authors</h4>
+            <label for="GL_aName">Name: </label>
+            <input type="text" id="GL_aName" class="GL_aName" /><br>
+            <label for="GL_aSurname">Surname: </label>
+            <input type="text" id="GL_aSurname" class="GL_aSurname" /><br>
+            <label for="GL_aBirth">Birthday: </label>
+            <input type="date" id="GL_aBirth" class="GL_aBirth" /><br>
+            <input type="submit" value="Submit" class="GL_aSubmit" />
+            <div class="GL_aStorageParams">
+                <p class="GL_aStorage"></p>
             </div>
         </div>
     </main>
     
   </body>
-  <script src="./js/counter.js"></script>
-  <script src="./js/galllery.js"></script>
+  <script src="./js/galllery.js" defer></script>
+
 </html>
