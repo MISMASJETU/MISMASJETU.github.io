@@ -56,9 +56,25 @@
             </div>
             <input type="submit" value="Reset" class="submit3" />
         </div>
+
+        <div class="border">
+            <h4>Color Guesser</h4>
+            <p class="cg_guess"></p>
+            <div class="cg_buttons">
+                <p>Game not started, select difficulty and reset</p>
+            </div>
+            <p class="cg_time">Last guess took:</p>
+            <p class="cg_score">Score: 0</p>
+            <p class="cg_highscore">High Score: 0</p>
+            <label for="cg_difficulty">Difficulty: </label>
+            <input type="number" id="cg_difficulty" class="cg_difficulty"/>
+            <input type="submit" value="Reset" class="cg_reset" />
+
+        </div>
     </main>
     
   </body>
   <script src="./js/counting.js"></script>
   <script src="./js/modulo.js"></script>
+  <script src="./js/colorguesser.js"></script>
 </html>
