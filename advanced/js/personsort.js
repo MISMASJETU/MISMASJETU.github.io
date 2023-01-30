@@ -14,7 +14,6 @@ function ps_person(name, age) {
     this.personString = function (){
         return this.name + " " + this.age;
     }
-    
 }
 function start(){
     let tmp;

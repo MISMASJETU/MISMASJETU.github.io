@@ -6,6 +6,7 @@ const cg_time = document.querySelector('.cg_time');
 const cg_score = document.querySelector('.cg_score');
 const cg_highscore = document.querySelector('.cg_highscore');
 const number = 3;
+let time = [];
 let cg_answer = 0;
 let cg_color;
 let score = Number(0);
@@ -54,20 +55,32 @@ function constructButton(){
         tmp_child.appendChild(tmpButton);
         cg_buttons.appendChild(tmp_child);
     }
-    //cg_guess.style.backgroundColor = cg_color;
+    cg_guess.style.backgroundColor = cg_color;
 }
 
 function clickAnswer(){
     //console.log(startTime);
     let tmp = (Number(Number(performance.now()) - Number(startTime)) / 1000);
-    cg_time.textContent = "Last guess took: " + tmp + " seconds";
+    time.push(tmp);
+    cg_time.textContent = "Guess takes aproximetly: " + (average(time)) + " seconds";
     score += Number(cg_difficulty.value);
     playRound();
     constructButton();
     scoreUpdate();
 }
 
+function average(input){
+    let sum = Number(0);
+    for (var number of input) {
+        sum += number;
+    }
+    return sum / input.length;
+}
+
 function clickWrong(){
+    let tmp = (Number(Number(performance.now()) - Number(startTime)) / 1000);
+    time.push(tmp);
+    cg_time.textContent = "Guess takes aproximetly: " + (average(time)) + " seconds";
     saveScore();
     localStorage.setItem("cg_highscore", highscore);
     score = 0;
@@ -80,6 +93,7 @@ function saveScore(){
         highscore = score;
     }
 }
+
 
 function playRound(){
     startTime = performance.now();
