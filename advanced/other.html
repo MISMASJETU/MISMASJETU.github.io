@@ -62,9 +62,28 @@
                 <p class="GL_aStorage"></p>
             </div>
         </div>
+        <div class="border" style="background-color: gray;">
+            <h4>Canvas</h4>
+            <input type="submit" value="clear" class="CD_clear" />
+            <input type="color" class="CD_color"/>
+            <select id="CD_tool" class="CD_tool">
+                <option value="brush">Brush</option>
+                <option value="line">Line</option>
+                <option value="fixedline">Fixed Line</option>
+                <option value="rectangle">Rectangle</option>
+                <option value="circle">Circle</option>
+                <option value="fillcircle">Filled Circle</option>
+                <option value="erase">Erase</option>
+            </select>
+            <label for="CD_slider">Size:</label>
+            <input type="range" min="1" max="25" value="5" class="CD_slider" id="CD_slider">
+            <br>
+            <canvas id="CD_canvas"></canvas>
+        </div>
     </main>
     
   </body>
   <script src="./js/galllery.js" defer></script>
+  <script src="./js/cavasdrawer.js" defer></script>
 
 </html>

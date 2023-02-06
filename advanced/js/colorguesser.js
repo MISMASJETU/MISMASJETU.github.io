@@ -84,6 +84,9 @@ function clickAnswer(){
     time.push(tmp);
     cg_time.textContent = "Guess takes aproximetly: " + (average(time)) + " seconds";
     score += Number(cg_difficulty.value);
+    if(cg_hardmode.checked === true){
+        score += Number(cg_difficulty.value);
+    }
     playRound();
     constructButton();
     scoreUpdate();
