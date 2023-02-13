@@ -3,17 +3,22 @@ const ctx = canvas.getContext("2d");
 const CD_testsubmit = document.querySelector(".CD_clear");
 const CD_color = document.querySelector(".CD_color");
 const CD_tool = document.querySelector(".CD_tool");
+const CD_alpha = document.querySelector(".CD_alpha");
 const CD_slider = document.querySelector(".CD_slider");
+const CD_save = document.querySelector(".CD_save");
+const CD_load = document.querySelector(".CD_load");
 canvas.width = 800;
 canvas.height = 600;
 let sizeWidth = ctx.canvas.clientWidth;
 let sizeHeight = ctx.canvas.clientHeight;
 let scaleWidth = sizeWidth/100;
 let scaleHeight = sizeHeight/100;
-let mode = 0;
+let mode = 10;
 let pathStart;
+let alpha = 100;
 clear();
 function clear(){
+    ctx.globalAlpha = 1;
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, sizeWidth, sizeHeight);
 }
@@ -44,6 +49,10 @@ function getTool(){
             mode = 99;
             break;
     }
+}
+
+function getAlpha(){
+    alpha = CD_alpha.value;
 }
 
 function pathDraw(x, y){
@@ -179,9 +188,14 @@ function brushDraw(x, y){
 }
 
 const getCursorPosition = (canvas, event) => { //https://blog.devgenius.io/how-to-get-the-coordinates-of-a-mouse-click-on-a-canvas-element-d5dc288c19e8
-    const rect = canvas.getBoundingClientRect()
-    const x = event.clientX - rect.left
-    const y = event.clientY - rect.top
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    getAlpha();
+    ctx.globalAlpha = alpha / 100;
+    if(mode == 0 || mode == 2 || mode == 4 || mode == 6 || mode == 8){
+        operationSave();
+    }
     if(mode == 0 || mode == 1){
         pathDraw(x, y);
     }
@@ -197,19 +211,131 @@ const getCursorPosition = (canvas, event) => { //https://blog.devgenius.io/how-t
     if(mode == 8 || mode == 9){
         fillCircleDraw(x, y);
     }
-    if(mode == 10 || mode == 11){
-        brushDraw(x, y);
-    }
+    //if(mode == 10 || mode == 11){
+    //    brushDraw(x, y);
+    //}
     if(mode == 99){
         erase(x, y);
     }
 }
+var mousePressed = false;
 
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+  }
 
+canvas.onmousedown = function(e) {
+    if(mode == 10){
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    mousePressed = true;
+    pathStart = [x,y];
+    //delay(10).then(() => continueBrush());
+    }
+};
 
+canvas.onmouseup = function(e) {
+    if(mode == 10){
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    mousePressed = false;
+    
+    ctx.beginPath();
+    ctx.lineWidth = CD_slider.value;
+    ctx.strokeStyle = CD_color.value;
+    ctx.moveTo(pathStart[0], pathStart[1]);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    }
+};
+
+function continueBrush(e){
+    if(mousePressed && mode == 10){
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        ctx.beginPath();
+        ctx.lineWidth = CD_slider.value;
+        ctx.strokeStyle = CD_color.value;
+        ctx.moveTo(pathStart[0], pathStart[1]);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        pathStart = [x,y];
+        //delay(10).then(() => continueBrush());
+    }
+}
 
 canvas.addEventListener('mousedown', (e) => { //https://blog.devgenius.io/how-to-get-the-coordinates-of-a-mouse-click-on-a-canvas-element-d5dc288c19e8
     getCursorPosition(canvas, e)
 })
 
+canvas.addEventListener('mousemove', (e) => {
+    continueBrush(e);
+    operationPreview(e);
+})
+
+function operationPreview(e){
+    //operationLoad();
+    
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    getAlpha();
+    ctx.globalAlpha = alpha / 100;
+    if(mode == 1){
+        operationLoad();
+        pathDraw(x, y);
+        mode = 1;
+    }
+    if(mode == 3){
+        operationLoad();
+        fixedDraw(x, y);
+        mode = 3;
+    }
+    if(mode == 5){
+        operationLoad();
+        rectDraw(x, y);
+        mode = 5;
+    }
+    if(mode == 7){
+        operationLoad();
+        circleDraw(x, y);
+        mode = 7;
+    }
+    if(mode == 9){
+        operationLoad();
+        fillCircleDraw(x, y);
+        mode = 9;
+    }
+    
+}
+
 CD_tool.addEventListener('input', getTool);
+
+CD_save.addEventListener('click', save);
+
+CD_load.addEventListener('click', load);
+
+let imageData = ctx.getImageData(0, 0, sizeWidth, sizeHeight);
+let operationData = ctx.getImageData(0, 0, sizeWidth, sizeHeight);
+
+function save(){
+    imageData = ctx.getImageData(0, 0, sizeWidth, sizeHeight);
+
+}
+
+function load(){
+    clear();
+    ctx.putImageData(imageData, 0, 0);
+}
+
+function operationSave(){
+    operationData = ctx.getImageData(0, 0, sizeWidth, sizeHeight);
+}
+
+function operationLoad(){
+    clear();
+    ctx.putImageData(operationData, 0, 0);
+}
