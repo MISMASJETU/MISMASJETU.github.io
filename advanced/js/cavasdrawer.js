@@ -7,7 +7,9 @@ const CD_alpha = document.querySelector(".CD_alpha");
 const CD_slider = document.querySelector(".CD_slider");
 const CD_save = document.querySelector(".CD_save");
 const CD_load = document.querySelector(".CD_load");
-canvas.width = 800;
+const CD_savename = document.querySelector(".CD_savename");
+const CD_saves = document.querySelector(".CD_saves");
+canvas.width = 1000;
 canvas.height = 600;
 let sizeWidth = ctx.canvas.clientWidth;
 let sizeHeight = ctx.canvas.clientHeight;
@@ -318,17 +320,34 @@ CD_save.addEventListener('click', save);
 
 CD_load.addEventListener('click', load);
 
-let imageData = ctx.getImageData(0, 0, sizeWidth, sizeHeight);
+function cd_save(data, name) {
+    this.data = data;
+    this.name = name;
+}
+let imageData = [];
 let operationData = ctx.getImageData(0, 0, sizeWidth, sizeHeight);
 
 function save(){
-    imageData = ctx.getImageData(0, 0, sizeWidth, sizeHeight);
-
+    imageData.push(new cd_save(ctx.getImageData(0, 0, sizeWidth, sizeHeight), CD_savename.value));
+    saveRefresh();
 }
 
 function load(){
     clear();
-    ctx.putImageData(imageData, 0, 0);
+    let tmpName = CD_saves.value;
+    
+    for(let i = 0; i < imageData.length; i++){
+        if(tmpName == imageData[i].name){
+            ctx.putImageData(imageData[i].data, 0, 0);
+        }
+    }
+}
+
+function saveRefresh(){
+    CD_saves.innerHTML = '';
+    for(let i = 0; i < imageData.length; i++){
+        CD_saves.innerHTML += '<option value="' + imageData[i].name + '">' + imageData[i].name  + '</option>';
+    }
 }
 
 function operationSave(){
