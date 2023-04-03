@@ -1,7 +1,9 @@
 aj - ajax.js
+cr - cryptobros.js
 gl - gallery.js
 cd - canvasdrawer.js
 cg - collorguesser.js
 ps - personsort.js
+qm - querrymaster.js
 qs - quicksort.js
 ts - textsort.js

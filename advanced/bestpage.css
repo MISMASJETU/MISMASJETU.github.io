@@ -44,3 +44,13 @@ a:visited {
         margin-bottom: 0.2em;
     }
 }
+
+.QM_content img {
+    width: 100px;
+    height: 100px;
+}
+
+.QM_content table {
+    border: 1px;
+    border-style: solid;
+}

@@ -30,6 +30,31 @@
     </nav>
     <main>
         <div class="border">
+            <h3>CRYPTOBROS</h3>
+            <label for="CR_cName">Name: </label>
+            <select id="CR_cList" class="CR_cList">
+                <option value="usd">Usd</option>
+                <option value="eur">Eur</option>
+                <option value="czk">CZK</option>
+            </select>
+            <label for="CR_crName">Name: </label>
+            <select id="CR_crList" class="CR_crList">
+                <option value="bitcoin">Bitcoin</option>
+                <option value="ethereum">Ethereum</option>
+                <option value="tether">Tether</option>
+            </select><br>
+            <div class="CR_table1"></div>
+            <br>
+            <div class="CR_table2 sortable"></div>
+        <div class="QM_content"></div>
+        </div>
+        <div class="border">
+            <input type="submit" value="DO DA THING" class="QM_button" />
+            <br>
+            <input type="number" id="QM_size" class="QM_size">
+            <div class="QM_content"></div>
+        </div>
+        <div class="border">
             <h4>Paintings</h4>
             <label for="GL_pName">Name: </label>
             <input type="text" id="GL_pName" class="GL_pName" /><br>
@@ -93,13 +118,18 @@
         <div class="border">
             <input type="submit" value="SUMMON DA DOG" class="AJ_button" />
             <br>
-            <img class="AJ_img">
+            <input type="number" id="AJ_size" class="AJ_size"/>
+            <div class="AJ_dogs"></div>
         </div>
     </main>
     
   </body>   
+  <script src="./js/jquery-3.6.4.js" defer></script>
+  <script src="./js/cryptobros.js" defer></script>
   <script src="./js/galllery.js" defer></script>
   <script src="./js/cavasdrawer.js" defer></script>
   <script src="./js/ajax.js" defer></script>
+  <link href="https://cdn.jsdelivr.net/gh/tofsjonas/sortable@latest/sortable.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/gh/tofsjonas/sortable@latest/sortable.min.js"></script>
 
 </html>
