@@ -16,7 +16,7 @@ function autoUpdate() {
     buildTable(CR_crList.value,CR_cList.value);
     
 }
-setInterval(autoUpdate, 4000); // Call the function every 1000ms (1 second)
+setInterval(autoUpdate, 6000); // Call the function every 1000ms (1 second)
 
 
 let historyX = {};
@@ -116,45 +116,29 @@ function buildTable(from,to){
 
     var tBody = document.createElement("tbody");
     for(let a = 0; a < 3; a++){
-      //for(let b = 0; b < 3; b++){
-        let row = tBody.insertRow();
-        let cell1 = row.insertCell();
-        let cell2 = row.insertCell();
-        let cell3 = row.insertCell();
-        let ab = "";
-        let ba = "";
-        let data = 0;
-        if(a == 0){
-          ab = "bitcoin"
-          data += 1000;
-        }
-        if(a == 1){
-          ab = "ethereum"
-          data += 2000;
-        }
-        if(a == 2){
-          ab = "tether"
-          data += 3000;
-        }
-        /*
-        if(b == 0){
-          ba = "usd"
-          data += 100;
-        }
-        if(b == 1){
-          ba = "eur"
-          data += 200;
-        }
-        if(b == 2){
-          ba = "czk"
-          data += 300;
-        }
-        */
-        cell1.innerHTML = ab + " to " + to;
-        cell1.setAttribute("data-sort",data);
-        cell2.innerHTML = historyX[ab][to][0].value;
-        cell3.innerHTML = historyX[ab][to][0].time;
-      //}
+      let row = tBody.insertRow();
+      let cell1 = row.insertCell();
+      let cell2 = row.insertCell();
+      let cell3 = row.insertCell();
+      let ab = "";
+      let ba = "";
+      let data = 0;
+      if(a == 0){
+        ab = "bitcoin"
+        data += 1000;
+      }
+      if(a == 1){
+        ab = "ethereum"
+        data += 2000;
+      }
+      if(a == 2){
+        ab = "tether"
+        data += 3000;
+      }
+      cell1.innerHTML = ab + " to " + to;
+      cell1.setAttribute("data-sort",data);
+      cell2.innerHTML = historyX[ab][to][0].value;
+      cell3.innerHTML = historyX[ab][to][0].time;
     }
     table2.appendChild(tBody);  
 
@@ -172,3 +156,23 @@ CR_cList.addEventListener('change', function(){
 CR_crList.addEventListener('change', function(){
   buildTable(CR_crList.value,CR_cList.value);
 }); 
+
+const canvas1 = document.getElementById("CR_canvas");
+const ctx1 = canvas1.getContext("2d");
+canvas1.width = 1000;
+canvas1.height = 500;
+
+drawLine(0,100,200,400);
+drawLine(200,400,400,350);
+drawLine(400,350,600,300);
+drawLine(600,300,800,150);
+drawLine(800,150,1000,100);
+function drawLine(x1,y1,x2,y2){
+  ctx1.strokeStyle = "#000000";
+  ctx1.beginPath();
+  ctx1.lineWidth = CD_slider.value;
+  ctx1.strokeStyle = CD_color.value;
+  ctx1.moveTo(x1,y1);
+  ctx1.lineTo(x2, y2);
+  ctx1.stroke();
+}
