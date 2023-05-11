@@ -8,7 +8,7 @@ const httpRequest = new XMLHttpRequest();
     if(httpRequest.readyState === XMLHttpRequest.DONE){
 
       let output = JSON.parse(httpRequest.responseText);
-      console.log(output);
+      //console.log(output);
       joke.innerHTML = output.joke;
     }
   };

@@ -31,7 +31,14 @@ const getCursorPosition = (canvas, event) => { //https://blog.devgenius.io/how-t
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-    //console.log(x + " " + y);
+
+    if(isNear(45, sizeHeight - 100, x, y, 40) && handIndex > 0){
+        handIndex -= 1;
+    }
+    if(isNear(sizeWidth - 45, sizeHeight - 100, x, y, 40) && playerCards.length - handIndex > 7){
+        handIndex += 1;
+    }
+    renderScreen();
 }
 
 canvas.addEventListener('mousedown', (e) => {
@@ -39,11 +46,24 @@ canvas.addEventListener('mousedown', (e) => {
 })
 
 canvas.addEventListener('mousemove', (e) => {
-    checkCursorPosition();
+    checkCursorPosition(canvas, e);
 })
 
-function checkCursorPosition(){
+let leftArrowMouse = false;
+let rightArrowMouse = false;
+
+function checkCursorPosition(canvas, event){
     //Will be used for howering above the arrows
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    leftArrowMouse = isNear(45, sizeHeight - 100, x, y, 40);
+    rightArrowMouse = isNear(sizeWidth - 45, sizeHeight - 100, x, y, 40);
+    renderScreen();
+}
+
+function isNear(x1, y1, x2, y2, distance){
+    return (Math.abs(x1 - x2) <= distance) && (Math.abs(y1 - y2) <= distance);
 }
 
 function card(textureID, tags) {
@@ -72,7 +92,6 @@ function loadTexture(id){
     img.onload = function() {
         txt[id] = img;
         loadedTextures++;
-        //console.log(id);
         ctx.imageSmoothingEnabled = false;
         ctx.drawImage(txt[id], 10, 10,txt[id].width * 4, txt[id].height * 4);
         if(loadedTextures == numberOfTextures){
@@ -174,9 +193,12 @@ function drawCard(side){
     if(side == "player"){
         playerCards.push(tmp);
     }
-    else
+    else if(side == "ai")
     {
         aiCards.push(tmp);
+    }
+    else {
+        currentCard = tmp;
     }
 }
 
@@ -192,7 +214,15 @@ function startGame(){
     for(let i = 0; i < starterCards; i++){
         drawCard("ai");
     }
+    drawCard("current");
+    renderScreen();
+}
+
+function renderScreen(){
+    bootScreen();
     renderPlayerHand();
+    renderArrows();
+    renderCard(currentCard, sizeWidth / 2, sizeHeight / 2);
 }
 
 function renderPlayerHand(){
@@ -211,9 +241,25 @@ function renderCard(card, x, y){
     ctx.drawImage(txt[card.textureID], x - txt[card.textureID].width * 2, y - txt[card.textureID].height * 2,txt[card.textureID].width * 4, txt[card.textureID].height * 4);
 }
 
+let handIndex = 0;
+
 function renderArrows(){
-    renderTexture("left", 45, sizeHeight - 100);
-    renderTexture("right", sizeWidth - 45, sizeHeight - 100);
+    if(handIndex > 0){
+        if(leftArrowMouse){
+            renderTexture("left_hover", 45, sizeHeight - 100);
+        } else {
+            renderTexture("left", 45, sizeHeight - 100);
+        }
+    }
+    
+    if(playerCards.length - handIndex > 7){
+        if(rightArrowMouse){
+            renderTexture("right_hover", sizeWidth - 45, sizeHeight - 100);
+        } else {
+            renderTexture("right", sizeWidth - 45, sizeHeight - 100);
+        }
+    }
+    
 }
 
 function renderTexture(id, x, y){
