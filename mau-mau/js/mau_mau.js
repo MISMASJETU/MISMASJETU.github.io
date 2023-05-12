@@ -92,7 +92,7 @@ function card(textureID, tags) {
     }
 }
 
-const numberOfTextures = 41;
+const numberOfTextures = 51;
 let loadedTextures = 0;
 let txt = [];
 function loadTexture(id){
@@ -152,6 +152,16 @@ function loadTextures(){
     loadTexture("A");
     loadTexture("YOUR_TURN");
     loadTexture("card");
+    loadTexture("1");
+    loadTexture("2");
+    loadTexture("3");
+    loadTexture("4");
+    loadTexture("5");
+    loadTexture("6");
+    loadTexture("7");
+    loadTexture("8");
+    loadTexture("9");
+    loadTexture("0");
 }
 
 createCards();
@@ -242,6 +252,7 @@ function renderScreen(){
     bootScreen();
     renderPlayerHand();
     renderArrows();
+    renderAiHand();
     renderCard(currentCard, sizeWidth / 2, sizeHeight / 2);
     if(turn == 1){
         renderTextureD("YOUR_TURN", 160, 30, 0.7, 0.7);
@@ -347,11 +358,22 @@ function playCard(id, type){
 
 function aiTurn(){
     for(let i = 0; i < aiCards.length; i++){
-        if(aiCards[i].canBeUsed(currentCard)){
+        if(aiCards[i].canBeUsed(currentCard.tags)){
             playCard(i,"ai");
             return;
         }
     }
     drawCard("ai");
     turn = 1;
+    renderScreen();
+}   
+
+function renderAiHand(){
+    renderTextureD("card", sizeWidth - 50, 20, 4, 4);
+    if(aiCards.length < 10){
+        renderTextureD(String(aiCards.length), sizeWidth - 50, 45, 6, 6);
+    } else {
+        renderTextureD(aiCards.length.toString()[0], sizeWidth - 65, 45, 5, 5);
+        renderTextureD(String(aiCards.length % 10), sizeWidth - 35, 45, 5, 5);
+    }
 }
