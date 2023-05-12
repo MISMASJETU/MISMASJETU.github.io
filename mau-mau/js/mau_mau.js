@@ -13,6 +13,7 @@ let currentCard;
 let unplayedCards = [];
 let playerCards = [];
 let aiCards = [];
+let turn = 1;
 
 function clear(){
     ctx.globalAlpha = 1;
@@ -38,10 +39,12 @@ const getCursorPosition = (canvas, event) => { //https://blog.devgenius.io/how-t
     if(isNear(sizeWidth - 45, sizeHeight - 100, x, y, 40) && playerCards.length - handIndex > 7){
         handIndex += 1;
     }
+    detectCardClick(x,y);
     renderScreen();
 }
 
 canvas.addEventListener('mousedown', (e) => {
+    e.preventDefault(); // prevent default action
     getCursorPosition(canvas, e);
 })
 
@@ -65,15 +68,18 @@ function checkCursorPosition(canvas, event){
 function isNear(x1, y1, x2, y2, distance){
     return (Math.abs(x1 - x2) <= distance) && (Math.abs(y1 - y2) <= distance);
 }
+function hoversOverCard(x1, y1, x2, y2){
+    return (Math.abs(x1 - x2) <= 64) && (Math.abs(y1 - y2) <= 96);
+}
 
 function card(textureID, tags) {
     this.textureID = textureID;
     this.tags = tags;
 
-    function canBeUsed(tag){
+    this.canBeUsed = function(tag){
         let passed = false;
-        for(let a = 0; a < tags.lenght; a++){
-            for(let b = 0; b < tag.lenght; b++){
+        for(let a = 0; a < tags.length; a++){
+            for(let b = 0; b < tag.length; b++){
                 if(tags[a] == tag[b]){
                     passed = true;
                 }
@@ -83,7 +89,7 @@ function card(textureID, tags) {
     }
 }
 
-const numberOfTextures = 38;
+const numberOfTextures = 41;
 let loadedTextures = 0;
 let txt = [];
 function loadTexture(id){
@@ -140,6 +146,9 @@ function loadTextures(){
     loadTexture("left_hover");
     loadTexture("right");
     loadTexture("right_hover");
+    loadTexture("A");
+    loadTexture("YOUR_TURN");
+    loadTexture("card");
 }
 
 createCards();
@@ -223,6 +232,13 @@ function renderScreen(){
     renderPlayerHand();
     renderArrows();
     renderCard(currentCard, sizeWidth / 2, sizeHeight / 2);
+    if(turn == 1){
+        renderTextureD("YOUR_TURN", 160, 30, 0.7, 0.7);
+        renderTextureD("card", 45, sizeHeight - 200, 2, 2);
+    }
+    if(turn == 2){
+        aiTurn();
+    }
 }
 
 function renderPlayerHand(){
@@ -265,4 +281,47 @@ function renderArrows(){
 function renderTexture(id, x, y){
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(txt[id], x - txt[id].width * 2, y - txt[id].height * 2,txt[id].width * 4, txt[id].height * 4);
+}
+
+function renderTextureD(id, x, y, width, height){
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(txt[id], x - txt[id].width * (width/2), y - txt[id].height * (height/2),txt[id].width * width, txt[id].height * height);
+}
+
+function detectCardClick(x, y){
+    if(turn == 1){
+        let size = Math.min(playerCards.length, 7);
+        let offset =  (size - 1) / 2;
+        const df = (sizeWidth / 2) - (offset * 120); //the point card renders from
+        for(let i = 0; i < size; i++){
+            if(hoversOverCard(x,y,df + (i * 120), sizeHeight - 100)){
+                playCard(i + handIndex, "player");
+            }
+        }
+    }
+    
+}
+
+function playCard(id, type){
+    let card = playerCards[id];
+    let passed = card.canBeUsed(currentCard.tags);
+    if(passed){
+        playedCards.push(currentCard);
+        currentCard = card;
+        if(type == "player"){
+            playerCards.splice(id, 1);
+            //turn = 2;
+        }
+        if(type == "ai"){
+            aiCards.splice(id, 1);
+            turn = 3; //starts card animation
+        }
+    }
+    while(handIndex + 7 > Math.max(playerCards.length,7)){
+        handIndex--;
+    }
+    renderScreen();
+}
+
+function aiTurn(){
 }
