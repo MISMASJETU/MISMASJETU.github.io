@@ -81,11 +81,15 @@ function hoversOverDraw(x1, y1, x2, y2){
     return (Math.abs(x1 - x2) <= 32) && (Math.abs(y1 - y2) <= 48);
 }
 
+let aMode = false;
+let drawMode = false;
+
 function card(textureID, tags) {
     this.textureID = textureID;
     this.tags = tags;
 
     this.canBeUsed = function(tag){
+        //test if A or 7 is contained, tag is always currentCard
         let passed = false;
         for(let a = 0; a < tags.length; a++){
             for(let b = 0; b < tag.length; b++){
@@ -296,6 +300,7 @@ function renderScreen(){
             renderTextureD(score.toString()[0], sizeWidth / 2 - 15, sizeHeight / 2 + 65, 5, 5);
             renderTextureD(String(score % 10), sizeWidth / 2 + 15, sizeHeight / 2 + 65, 5, 5);
         }
+        save();
     }
 }
 
@@ -445,4 +450,22 @@ function startAnimation() {
             renderScreen();
         }
     }
+}
+if(localStorage.getItem('score'))
+
+function save(){
+    if(localStorage.getItem('score') < score){
+        localStorage.setItem('score', score);
+    }
+}
+
+const Hscore = document.getElementById("score");
+
+load();
+function load(){
+    let x = localStorage.getItem('score');
+    if(typeof x === 'undefined' || x === null){
+        localStorage.setItem('score', 0);
+    }
+    Hscore.innerHTML = "High Score: " + localStorage.getItem('score');
 }
