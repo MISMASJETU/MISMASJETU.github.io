@@ -230,7 +230,7 @@ function renderPlayerHand(){
     let offset =  (size - 1) / 2;
     const df = (sizeWidth / 2) - (offset * 120); //the point card renders from
     for(let i = 0; i < size; i++){
-        renderCard(playerCards[i], df + (i * 120), sizeHeight - 100);
+        renderCard(playerCards[i + handIndex], df + (i * 120), sizeHeight - 100);
     }
     renderArrows();
 }
