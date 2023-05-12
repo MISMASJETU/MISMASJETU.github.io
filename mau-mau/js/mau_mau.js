@@ -71,6 +71,9 @@ function isNear(x1, y1, x2, y2, distance){
 function hoversOverCard(x1, y1, x2, y2){
     return (Math.abs(x1 - x2) <= 64) && (Math.abs(y1 - y2) <= 96);
 }
+function hoversOverDraw(x1, y1, x2, y2){
+    return (Math.abs(x1 - x2) <= 32) && (Math.abs(y1 - y2) <= 48);
+}
 
 function card(textureID, tags) {
     this.textureID = textureID;
@@ -197,6 +200,14 @@ function randomizeDeck(){
 }
 
 function drawCard(side){
+    while(unplayedCards.length <= 0){
+        if(playedCards.length > 0){
+            unplayedCards = playedCards;
+            playedCards = [];
+        } else {
+            return;
+        }
+    }
     let tmp = unplayedCards[unplayedCards.length - 1];
     unplayedCards.pop();
     if(side == "player"){
@@ -298,23 +309,34 @@ function detectCardClick(x, y){
                 playCard(i + handIndex, "player");
             }
         }
+        if(hoversOverDraw(x,y,45, sizeHeight - 200)){
+            drawCard("player");
+            renderScreen();
+            turn = 2;
+        }
     }
     
 }
 
 function playCard(id, type){
-    let card = playerCards[id];
+    let card;
+    if(type == "player"){
+        card = playerCards[id];
+    }
+    if(type == "ai"){
+        card = aiCards[id];
+    }
     let passed = card.canBeUsed(currentCard.tags);
     if(passed){
         playedCards.push(currentCard);
         currentCard = card;
         if(type == "player"){
             playerCards.splice(id, 1);
-            //turn = 2;
+            turn = 2;
         }
         if(type == "ai"){
             aiCards.splice(id, 1);
-            turn = 3; //starts card animation
+            turn = 1; //starts card animation
         }
     }
     while(handIndex + 7 > Math.max(playerCards.length,7)){
@@ -324,4 +346,12 @@ function playCard(id, type){
 }
 
 function aiTurn(){
+    for(let i = 0; i < aiCards.length; i++){
+        if(aiCards[i].canBeUsed(currentCard)){
+            playCard(i,"ai");
+            return;
+        }
+    }
+    drawCard("ai");
+    turn = 1;
 }
