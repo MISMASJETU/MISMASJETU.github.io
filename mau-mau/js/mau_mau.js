@@ -42,7 +42,7 @@ const getCursorPosition = (canvas, event) => { //https://blog.devgenius.io/how-t
         handIndex += 1;
     }
     detectCardClick(x,y);
-    if(mode == 1 || mode == 2){
+    if(turn == 1 || turn == 2){
         renderScreen();
     }
 }
@@ -66,7 +66,7 @@ function checkCursorPosition(canvas, event){
     const y = event.clientY - rect.top;
     leftArrowMouse = isNear(45, sizeHeight - 100, x, y, 40);
     rightArrowMouse = isNear(sizeWidth - 45, sizeHeight - 100, x, y, 40);
-    if(mode == 1 || mode == 2){
+    if(turn == 1 || turn == 2){
         renderScreen();
     }
 }
@@ -434,6 +434,9 @@ function startAnimation() {
     }, 25);
 
     function renderAnimation(i){
+        if(turn != 3){
+            return;
+        }
         renderScreen();
         renderCard(animationCard, (sizeWidth / 2), (sizeHeight / 2)  - (250 * ((60 - i) / 60)));
         if(i === 60 - 1){
