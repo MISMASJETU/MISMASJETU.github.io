@@ -15,6 +15,8 @@ let playerCards = [];
 let aiCards = [];
 let turn = 1;
 
+let score = 99;
+
 function clear(){
     ctx.globalAlpha = 1;
     ctx.fillStyle = "white";
@@ -40,7 +42,9 @@ const getCursorPosition = (canvas, event) => { //https://blog.devgenius.io/how-t
         handIndex += 1;
     }
     detectCardClick(x,y);
-    renderScreen();
+    if(mode == 1 || mode == 2){
+        renderScreen();
+    }
 }
 
 canvas.addEventListener('mousedown', (e) => {
@@ -62,7 +66,9 @@ function checkCursorPosition(canvas, event){
     const y = event.clientY - rect.top;
     leftArrowMouse = isNear(45, sizeHeight - 100, x, y, 40);
     rightArrowMouse = isNear(sizeWidth - 45, sizeHeight - 100, x, y, 40);
-    renderScreen();
+    if(mode == 1 || mode == 2){
+        renderScreen();
+    }
 }
 
 function isNear(x1, y1, x2, y2, distance){
@@ -92,7 +98,7 @@ function card(textureID, tags) {
     }
 }
 
-const numberOfTextures = 51;
+const numberOfTextures = 54;
 let loadedTextures = 0;
 let txt = [];
 function loadTexture(id){
@@ -101,8 +107,8 @@ function loadTexture(id){
     img.onload = function() {
         txt[id] = img;
         loadedTextures++;
-        ctx.imageSmoothingEnabled = false;
-        ctx.drawImage(txt[id], 10, 10,txt[id].width * 4, txt[id].height * 4);
+        //ctx.imageSmoothingEnabled = false;
+        //ctx.drawImage(txt[id], 10, 10,txt[id].width * 4, txt[id].height * 4);
         if(loadedTextures == numberOfTextures){
             startGame();
         }
@@ -162,6 +168,9 @@ function loadTextures(){
     loadTexture("8");
     loadTexture("9");
     loadTexture("0");
+    loadTexture("DEFEAT");
+    loadTexture("VICTORY");
+    loadTexture("SCORE");
 }
 
 createCards();
@@ -237,7 +246,7 @@ function startGame(){
     unplayedCards = playedCards;
     playedCards = [];
     randomizeDeck();
-    let starterCards = 10;
+    let starterCards = 6;
     for(let i = 0; i < starterCards; i++){
         drawCard("player");
     }
@@ -249,6 +258,12 @@ function startGame(){
 }
 
 function renderScreen(){
+    if(playerCards.length <= 0){
+        turn = 4;
+    }
+    if(aiCards.length <= 0){
+        turn = 5;
+    }
     bootScreen();
     renderPlayerHand();
     renderArrows();
@@ -260,6 +275,27 @@ function renderScreen(){
     }
     if(turn == 2){
         aiTurn();
+    }
+    if(turn == 4 || turn == 5){
+        bootScreen();
+        let tmp;
+        if(turn == 4){
+            tmp = "VICTORY";
+        } else {
+            score -= 25;
+            tmp = "DEFEAT";
+        }
+        if(score < 0){
+            score = 0;
+        }
+        renderTextureD(tmp, sizeWidth / 2, sizeHeight / 2 - 100, 1, 1);
+        renderTextureD("SCORE", sizeWidth / 2, sizeHeight / 2, 1, 1);
+        if(score < 10){
+            renderTextureD(String(score), sizeWidth / 2, 45, 6, 6);
+        } else {
+            renderTextureD(score.toString()[0], sizeWidth / 2 - 15, sizeHeight / 2 + 65, 5, 5);
+            renderTextureD(String(score % 10), sizeWidth / 2 + 15, sizeHeight / 2 + 65, 5, 5);
+        }
     }
 }
 
@@ -340,14 +376,16 @@ function playCard(id, type){
     let passed = card.canBeUsed(currentCard.tags);
     if(passed){
         playedCards.push(currentCard);
-        currentCard = card;
         if(type == "player"){
+            currentCard = card;
             playerCards.splice(id, 1);
             turn = 2;
         }
         if(type == "ai"){
+            animationCard = card;
             aiCards.splice(id, 1);
             turn = 1; //starts card animation
+
         }
     }
     while(handIndex + 7 > Math.max(playerCards.length,7)){
@@ -356,10 +394,15 @@ function playCard(id, type){
     renderScreen();
 }
 
+let animationCard;
+
 function aiTurn(){
+    score--;
     for(let i = 0; i < aiCards.length; i++){
         if(aiCards[i].canBeUsed(currentCard.tags)){
             playCard(i,"ai");
+            turn = 3;
+            startAnimation();
             return;
         }
     }
@@ -375,5 +418,28 @@ function renderAiHand(){
     } else {
         renderTextureD(aiCards.length.toString()[0], sizeWidth - 65, 45, 5, 5);
         renderTextureD(String(aiCards.length % 10), sizeWidth - 35, 45, 5, 5);
+    }
+}
+
+
+
+function startAnimation() {
+    let counter = 0;
+    const intervalId = setInterval(() => {
+      renderAnimation(counter);
+      counter++;
+      if (counter === 60) {
+        clearInterval(intervalId);
+      }
+    }, 25);
+
+    function renderAnimation(i){
+        renderScreen();
+        renderCard(animationCard, (sizeWidth / 2), (sizeHeight / 2)  - (250 * ((60 - i) / 60)));
+        if(i === 60 - 1){
+            turn = 1;
+            currentCard = animationCard;
+            renderScreen();
+        }
     }
 }
