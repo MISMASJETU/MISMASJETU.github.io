@@ -13,7 +13,7 @@ let currentCard;
 let unplayedCards = [];
 let playerCards = [];
 let aiCards = [];
-let turn = 1;
+let turn = 0;
 
 let score = 99;
 
@@ -256,7 +256,6 @@ function drawCard(side){
     }
 }
 
-//startGame();
 function startGame(){
     unplayedCards = playedCards;
     playedCards = [];
@@ -269,10 +268,14 @@ function startGame(){
         drawCard("ai");
     }
     drawCard("current");
+    turn = 1;
     renderScreen();
 }
 
 function renderScreen(){
+    if(turn == 0){
+        return;
+    }
     if(playerCards.length <= 0){
         turn = 4;
     }
