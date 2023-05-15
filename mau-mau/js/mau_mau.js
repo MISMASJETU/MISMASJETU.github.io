@@ -261,7 +261,7 @@ function startGame(){
     playedCards = [];
     randomizeDeck();
     let starterCards = 6;
-    for(let i = 0; i < starterCards * 2; i++){
+    for(let i = 0; i < starterCards; i++){
         drawCard("player");
     }
     for(let i = 0; i < starterCards; i++){
@@ -288,6 +288,11 @@ function renderScreen(){
     renderAiHand();
     renderCard(currentCard, sizeWidth / 2, sizeHeight / 2);
     if(turn == 1){
+        if(!canPlayerPlay()){
+            //drawFunction();
+            //turn = 2;
+        } else{
+        }
         renderTextureD("YOUR_TURN", 160, 30, 0.7, 0.7);
         renderTextureD("card", 45, sizeHeight - 200, 2, 2);
     }
@@ -385,9 +390,18 @@ function detectCardClick(x, y){
     
 }
 
+function canPlayerPlay(){
+    for(let i = 0; i < playerCards.length; i++){
+        if(playerCards[i].canBeUsed(currentCard.tags)){
+            return true;
+        }
+    }
+    return false;
+}
+
 function drawFunction(side){
     if(drawMode > 0){
-        for(let i = 0; i < drawMode; i++){
+        for(let i = 0; i < drawMode * 2; i++){
             drawCard(side);
         }
         drawMode = 0;
