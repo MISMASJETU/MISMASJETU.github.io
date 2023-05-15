@@ -261,7 +261,7 @@ function startGame(){
     playedCards = [];
     randomizeDeck();
     let starterCards = 6;
-    for(let i = 0; i < starterCards; i++){
+    for(let i = 0; i < starterCards * 2; i++){
         drawCard("player");
     }
     for(let i = 0; i < starterCards; i++){
