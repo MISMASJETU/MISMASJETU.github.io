@@ -82,7 +82,7 @@ function hoversOverDraw(x1, y1, x2, y2){
 }
 
 let aMode = false;
-let drawMode = false;
+let drawMode = 0;
 
 function card(textureID, tags) {
     this.textureID = textureID;
@@ -92,11 +92,22 @@ function card(textureID, tags) {
         //test if A or 7 is contained, tag is always currentCard
         let passed = false;
         for(let a = 0; a < tags.length; a++){
-            for(let b = 0; b < tag.length; b++){
-                if(tags[a] == tag[b]){
+            if(aMode){
+                if(tags[a] == "1"){
                     passed = true;
                 }
+            } else if(drawMode > 0){
+                if(tags[a] == "7"){
+                    passed = true;
+                }
+            } else {
+                for(let b = 0; b < tag.length; b++){
+                    if(tags[a] == tag[b]){
+                        passed = true;
+                    }
+                }
             }
+            
         }
         return passed;
     }
@@ -211,8 +222,8 @@ function createCards(){
     playedCards.push(new card("hj",["h","j"]));
     playedCards.push(new card("hk",["h","k"]));
     playedCards.push(new card("hq",["h","q"]));
-    playedCards.push(new card("j1",["h","s","c","d","1","7","8","9","10","j","k","q"]));
-    playedCards.push(new card("j2",["h","s","c","d","1","7","8","9","10","j","k","q"]));
+    playedCards.push(new card("j1",["h","s","c","d","1","7","8","9","10","j","k","q","j"]));
+    playedCards.push(new card("j2",["h","s","c","d","1","7","8","9","10","j","k","q","j"]));
 }
 
 function randomizeDeck(){
@@ -301,6 +312,7 @@ function renderScreen(){
             renderTextureD(String(score % 10), sizeWidth / 2 + 15, sizeHeight / 2 + 65, 5, 5);
         }
         save();
+        load();
     }
 }
 
@@ -362,12 +374,25 @@ function detectCardClick(x, y){
             }
         }
         if(hoversOverDraw(x,y,45, sizeHeight - 200)){
-            drawCard("player");
+            drawFunction("player");
             renderScreen();
             turn = 2;
         }
     }
     
+}
+
+function drawFunction(side){
+    if(drawMode > 0){
+        for(let i = 0; i < drawMode; i++){
+            drawCard(side);
+        }
+        drawMode = 0;
+    }else if(!aMode){
+        drawCard(side);
+    } else {
+        aMode = false;
+    }
 }
 
 function playCard(id, type){
@@ -379,6 +404,7 @@ function playCard(id, type){
         card = aiCards[id];
     }
     let passed = card.canBeUsed(currentCard.tags);
+    activateModes(card);
     if(passed){
         playedCards.push(currentCard);
         if(type == "player"){
@@ -399,6 +425,15 @@ function playCard(id, type){
     renderScreen();
 }
 
+function activateModes(card){
+    if(card.tags.includes("7") && (drawMode > 0 || !card.tags.includes("j"))){
+        drawMode += 1;
+    }
+    if(card.tags.includes("1") && !card.tags.includes("j")){
+        aMode = true;
+    }
+}
+
 let animationCard;
 
 function aiTurn(){
@@ -411,7 +446,7 @@ function aiTurn(){
             return;
         }
     }
-    drawCard("ai");
+    drawFunction("ai");
     turn = 1;
     renderScreen();
 }   
