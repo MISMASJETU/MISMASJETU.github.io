@@ -1,35 +1,42 @@
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-canvas.width = 1000;
-canvas.height = 600;
-let sizeWidth = ctx.canvas.clientWidth;
-let sizeHeight = ctx.canvas.clientHeight;
-let scaleWidth = sizeWidth/100;
-let scaleHeight = sizeHeight/100;
+const canvas = document.getElementById("canvas"); //Canvas
+const ctx = canvas.getContext("2d"); //Canvas ctx
+canvas.width = 1000; //Sets width of the canvas
+canvas.height = 600; //Sets height of the canvas
+let sizeWidth = ctx.canvas.clientWidth; //Width of the canvas for client
+let sizeHeight = ctx.canvas.clientHeight; //Height of the canvas for client
+let scaleWidth = sizeWidth/100; //1% Of width
+let scaleHeight = sizeHeight/100; //1% Of height
 bootScreen();
 
-let playedCards = [];
-let currentCard;
-let unplayedCards = [];
-let playerCards = [];
-let aiCards = [];
-let turn = 0;
+let playedCards = []; //Cards waiting to be added back into the pack
+let currentCard; //Current card on the field
+let unplayedCards = []; //Cards yet to be drawn
+let playerCards = []; //Cards held by the player
+let aiCards = []; //Cards held by the ai
+let turn = 0; //Current turn also means mode
+//1 = Player turn
+//2 = Ai turn
+//3 = Animation
+//4 = Victory
+//5 = Defeat
 
-let score = 99;
+let score = 99; //Player Score
 
+//Actually unused
 function clear(){
     ctx.globalAlpha = 1;
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, sizeWidth, sizeHeight);
 }
 
+//Renders background
 function bootScreen(){
-    clear();
     ctx.globalAlpha = 1;
     ctx.fillStyle = "#222222";
     ctx.fillRect(0, 0, sizeWidth, sizeHeight);
 }
 
+//Gets position of the cursor and handles player hand arrows and also updates the screen
 const getCursorPosition = (canvas, event) => { //https://blog.devgenius.io/how-to-get-the-coordinates-of-a-mouse-click-on-a-canvas-element-d5dc288c19e8
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
@@ -47,11 +54,13 @@ const getCursorPosition = (canvas, event) => { //https://blog.devgenius.io/how-t
     }
 }
 
+//Triggers when mouse is clicked
 canvas.addEventListener('mousedown', (e) => {
     e.preventDefault(); // prevent default action
     getCursorPosition(canvas, e);
 })
 
+//Triggers when mouse moves
 canvas.addEventListener('mousemove', (e) => {
     checkCursorPosition(canvas, e);
 })
@@ -59,6 +68,7 @@ canvas.addEventListener('mousemove', (e) => {
 let leftArrowMouse = false;
 let rightArrowMouse = false;
 
+//Check curser position and can lights up arrows, also updates the screen
 function checkCursorPosition(canvas, event){
     //Will be used for howering above the arrows
     const rect = canvas.getBoundingClientRect();
@@ -70,13 +80,15 @@ function checkCursorPosition(canvas, event){
         renderScreen();
     }
 }
-
+//Checks if mouse is hovering above specific place
 function isNear(x1, y1, x2, y2, distance){
     return (Math.abs(x1 - x2) <= distance) && (Math.abs(y1 - y2) <= distance);
 }
+//Checks if mouse is hovering above specific card
 function hoversOverCard(x1, y1, x2, y2){
     return (Math.abs(x1 - x2) <= 64) && (Math.abs(y1 - y2) <= 96);
 }
+//Checks if mouse is hovering above draw button
 function hoversOverDraw(x1, y1, x2, y2){
     return (Math.abs(x1 - x2) <= 32) && (Math.abs(y1 - y2) <= 48);
 }
@@ -84,12 +96,12 @@ function hoversOverDraw(x1, y1, x2, y2){
 let aMode = false;
 let drawMode = 0;
 
+//Cards, need I explain more?
 function card(textureID, tags) {
     this.textureID = textureID;
     this.tags = tags;
 
     this.canBeUsed = function(tag){
-        //test if A or 7 is contained, tag is always currentCard
         let passed = false;
         for(let a = 0; a < tags.length; a++){
             if(aMode){
@@ -112,7 +124,7 @@ function card(textureID, tags) {
         return passed;
     }
 }
-
+//Handles texture loading
 const numberOfTextures = 54;
 let loadedTextures = 0;
 let txt = [];
@@ -130,6 +142,7 @@ function loadTexture(id){
     };
 }
 
+//Loads all textures
 loadTextures();
 function loadTextures(){
     loadTexture("s1");
@@ -188,6 +201,7 @@ function loadTextures(){
     loadTexture("SCORE");
 }
 
+//Creates all the cards
 createCards();
 function createCards(){
     playedCards.push(new card("s1",["s","1"]));
@@ -226,18 +240,18 @@ function createCards(){
     playedCards.push(new card("j2",["h","s","c","d","1","7","8","9","10","j","k","q","j"]));
 }
 
+//Randomizes the deck
 function randomizeDeck(){
     unplayedCards.sort(() => Math.random() - 0.5);
-    /*for(let i = 0; i < unplayedCards.length; i++){
-        console.log(unplayedCards[i]);
-    }*/
 }
 
+//Draws card for either player or ai
 function drawCard(side){
     while(unplayedCards.length <= 0){
         if(playedCards.length > 0){
             unplayedCards = playedCards;
             playedCards = [];
+            randomizeDeck();
         } else {
             return;
         }
@@ -256,6 +270,7 @@ function drawCard(side){
     }
 }
 
+//Starts the game, duh
 function startGame(){
     unplayedCards = playedCards;
     playedCards = [];
@@ -272,6 +287,7 @@ function startGame(){
     renderScreen();
 }
 
+//Renders the screen, duh
 function renderScreen(){
     if(turn == 0){
         return;
@@ -324,6 +340,7 @@ function renderScreen(){
     }
 }
 
+//Renders player hand, duh
 function renderPlayerHand(){
     let size = Math.min(playerCards.length, 7);
     let offset =  (size - 1) / 2;
@@ -334,14 +351,16 @@ function renderPlayerHand(){
     renderArrows();
 }
 
+//Renders a card, duh
 function renderCard(card, x, y){
     const img = card;
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(txt[card.textureID], x - txt[card.textureID].width * 2, y - txt[card.textureID].height * 2,txt[card.textureID].width * 4, txt[card.textureID].height * 4);
 }
 
-let handIndex = 0;
+let handIndex = 0; //Value of how many cards the player has shifted
 
+//Renders the player card arrows
 function renderArrows(){
     if(handIndex > 0){
         if(leftArrowMouse){
@@ -361,16 +380,19 @@ function renderArrows(){
     
 }
 
+//Renders any texture
 function renderTexture(id, x, y){
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(txt[id], x - txt[id].width * 2, y - txt[id].height * 2,txt[id].width * 4, txt[id].height * 4);
 }
 
+//Renders texture, but size of it can be specified
 function renderTextureD(id, x, y, width, height){
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(txt[id], x - txt[id].width * (width/2), y - txt[id].height * (height/2),txt[id].width * width, txt[id].height * height);
 }
 
+//Detects if mouse is clicking on a card
 function detectCardClick(x, y){
     if(turn == 1){
         let size = Math.min(playerCards.length, 7);
@@ -390,6 +412,7 @@ function detectCardClick(x, y){
     
 }
 
+//Checks if player actually can play any card
 function canPlayerPlay(){
     for(let i = 0; i < playerCards.length; i++){
         if(playerCards[i].canBeUsed(currentCard.tags)){
@@ -399,6 +422,7 @@ function canPlayerPlay(){
     return false;
 }
 
+//Before card can be drawn, it checks if aMode or drawMode is active and handles them respectively
 function drawFunction(side){
     if(drawMode > 0){
         for(let i = 0; i < drawMode * 2; i++){
@@ -412,6 +436,7 @@ function drawFunction(side){
     }
 }
 
+//Handles when card is supossed to be played
 function playCard(id, type){
     let card;
     if(type == "player"){
@@ -442,6 +467,7 @@ function playCard(id, type){
     renderScreen();
 }
 
+//Handles activation of Amode and drawMode
 function activateModes(card){
     if(card.tags.includes("7") && (drawMode > 0 || !card.tags.includes("j"))){
         drawMode += 1;
@@ -453,6 +479,7 @@ function activateModes(card){
 
 let animationCard;
 
+//Handles ai turn
 function aiTurn(){
     score--;
     for(let i = 0; i < aiCards.length; i++){
@@ -468,6 +495,7 @@ function aiTurn(){
     renderScreen();
 }   
 
+//Renders how many cards does the ai have
 function renderAiHand(){
     renderTextureD("card", sizeWidth - 50, 20, 4, 4);
     if(aiCards.length < 10){
@@ -479,7 +507,7 @@ function renderAiHand(){
 }
 
 
-
+//Starts animation of card sliding into the place
 function startAnimation() {
     let counter = 0;
     const intervalId = setInterval(() => {
@@ -503,16 +531,17 @@ function startAnimation() {
         }
     }
 }
-if(localStorage.getItem('score'))
 
+//Saves high score
 function save(){
     if(localStorage.getItem('score') < score){
         localStorage.setItem('score', score);
     }
 }
 
-const Hscore = document.getElementById("score");
+const Hscore = document.getElementById("score"); //High score paragraph
 
+//Loads high score
 load();
 function load(){
     let x = localStorage.getItem('score');
